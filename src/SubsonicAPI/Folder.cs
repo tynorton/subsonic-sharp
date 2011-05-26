@@ -4,7 +4,7 @@
     Copyright (C) 2011  Ty Norton (norton@bsd.bz)
     
     Based on prototype code written by Ian Fijolek
-    You can his code here: http://code.google.com/p/subsonic-csharp
+    You can find his code here: http://code.google.com/p/subsonic-csharp
  
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
