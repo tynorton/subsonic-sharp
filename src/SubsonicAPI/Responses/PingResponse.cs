@@ -20,21 +20,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **************************************************************************/
 
-namespace SubsonicSharp
+namespace SubsonicSharp.Responses
 {
-    public class Song : SubsonicItem
-    {
-        public Song()
-        {
-            base.ItemType = SubsonicItemType.Song;
-        }
-
-        public Song(string theTitle, string theId)
-        {
-            Name = theTitle;
-            ID = theId;
-
-            base.ItemType = SubsonicItemType.Song;
-        }
-    }
+    // Ping has no inner XML, nothing to define here
+    public class PingResponse : GenericSoapResponse{ }
 }

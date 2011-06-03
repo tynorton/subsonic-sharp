@@ -22,7 +22,7 @@
 
 using System;
 
-namespace SubsonicAPI
+namespace SubsonicSharp
 {
     public class AuthorizationException : Exception
     {

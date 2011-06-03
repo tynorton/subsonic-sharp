@@ -27,9 +27,9 @@ using System.Linq;
 using System.Net;
 using System.Text;
 
-namespace SubsonicAPI
+namespace SubsonicSharp
 {
-    public class SubsonicConnection
+    public class SubsonicConnection : ISubsonicConnection
     {
         // Version of the REST API implemented
         private const string API_VERSION = "1.4.0";
@@ -52,32 +52,20 @@ namespace SubsonicAPI
             this.m_appName = string.IsNullOrEmpty(appName) ? defaultAppName : appName;
         }
 
-        /// <summary>
-        /// Takes parameters for server, username and password to generate an auth header
-        /// and Pings the server
-        /// </summary>
-        /// <returns>True if successful</returns>
         public bool LogIn()
         {
             StreamReader sr = new StreamReader(this.MakeGenericRequest("ping"));
             string result = sr.ReadToEnd();
 
+            // Ping doesn't actually return a result, so any response will do
             if (!string.IsNullOrEmpty(result))
             {
-                /// TODO: Parse the result and determine if logged in or not
                 this.m_isAuthenticated = true;
             }
 
             return this.m_isAuthenticated;
         }
 
-        /// <summary>
-        /// Uses the Auth Header for logged in user to make an HTTP request to the server 
-        /// with the given Subsonic API method and parameters
-        /// </summary>
-        /// <param name="method"></param>
-        /// <param name="parameters"></param>
-        /// <returns>Datastream of the server response</returns>
         public Stream MakeGenericRequest(string method, Dictionary<string, string> parameters = null)
         {
             // Check to see if Logged In yet

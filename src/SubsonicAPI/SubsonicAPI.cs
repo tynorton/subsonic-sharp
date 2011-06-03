@@ -24,7 +24,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 
-namespace SubsonicAPI
+namespace SubsonicSharp
 {
     /// <summary>
     /// Open Source C# Implementation of the Subsonic API
@@ -38,7 +38,7 @@ namespace SubsonicAPI
         /// <param name="musicFolderId">Required: No; If specified, only return artists in the music folder with the given ID.</param>
         /// <param name="ifModifiedSince">Required: No; If specified, only return a result if the artist collection has changed since the given time.</param>
         /// <returns>Dictionary, Key = Artist and Value = id</returns>
-        public static Dictionary<string, string> GetIndexes(SubsonicConnection connection, string musicFolderId = "", string ifModifiedSince = "")
+        public static Dictionary<string, string> GetIndexes(ISubsonicConnection connection, string musicFolderId = "", string ifModifiedSince = "")
         {
             // Load the parameters if provided
             Dictionary<string, string> parameters = new Dictionary<string, string>();
@@ -90,41 +90,19 @@ namespace SubsonicAPI
             return artists;
         }
 
-        // If set to zero, no limit 
-        // is imposed. Legal values are: 0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256 and 320.
-        public enum Bitrate
-        {
-            NoPreference = -1, 
-            Maximum = 0,
-            Kbps32 = 32,
-            Kbps40 = 40, 
-            Kbps48 = 48, 
-            Kbps56 = 56, 
-            Kbps64 = 64, 
-            Kbps80 = 80, 
-            Kbps96 = 96, 
-            Kbps112 = 112, 
-            Kbps128 = 128, 
-            Kbps160 = 160, 
-            Kbps192 = 192, 
-            Kbps224 = 224, 
-            Kbps256 = 256, 
-            Kbps320 = 320
-        }
-
         /// <summary>
         /// Streams a given music file. (Renamed from request name "stream")
         /// </summary>
+        /// <param name="connection"></param>
         /// <param name="id">Required: Yes; A string which uniquely identifies the file to stream. 
         /// Obtained by calls to getMusicDirectory.</param>
         /// <param name="maxBitRate">Required: No; If specified, the server will attempt to 
         /// limit the bitrate to this value, in kilobits per second.  </param>
         /// <returns></returns>
-        public static Stream StreamSong(SubsonicConnection connection, string id, Bitrate maxBitRate = Bitrate.NoPreference)
+        public static Stream StreamSong(ISubsonicConnection connection, string id, Bitrate maxBitRate = Bitrate.NoPreference)
         {
             // Reades the id of the song and sets it as a parameter
-            Dictionary<string, string> theParameters = new Dictionary<string, string>();
-            theParameters.Add("id", id);
+            Dictionary<string, string> theParameters = new Dictionary<string, string> {{"id", id}};
             if (!maxBitRate.Equals(Bitrate.NoPreference))
             {
                 theParameters.Add("maxBitRate", maxBitRate.ToString());
@@ -139,10 +117,9 @@ namespace SubsonicAPI
         /// </summary>
         /// <param name="id">A string which uniquely identifies the music folder. Obtained by calls to getIndexes or getMusicDirectory.</param>
         /// <returns>Folder object containing info for the specified directory</returns>
-        public static Folder GetMusicDirectory(SubsonicConnection connection, string id)
+        public static Folder GetMusicDirectory(ISubsonicConnection connection, string id)
         {
-            Dictionary<string, string> theParameters = new Dictionary<string, string>();
-            theParameters.Add("id", id);
+            Dictionary<string, string> theParameters = new Dictionary<string, string> {{"id", id}};
             Stream theStream = connection.MakeGenericRequest("getMusicDirectory", theParameters);
 
             StreamReader sr = new StreamReader(theStream);
@@ -185,7 +162,7 @@ namespace SubsonicAPI
         /// <summary>
         /// Returns what is currently being played by all users. Takes no extra parameters. 
         /// </summary>
-        public static List<Song> GetNowPlaying(SubsonicConnection connection)
+        public static List<Song> GetNowPlaying(ISubsonicConnection connection)
         {
             List<Song> nowPlaying = new List<Song>();
 

@@ -20,21 +20,22 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **************************************************************************/
 
+using System.Collections.Generic;
+using System.IO;
+
 namespace SubsonicSharp
 {
-    public class Song : SubsonicItem
+    public interface ISubsonicConnection
     {
-        public Song()
-        {
-            base.ItemType = SubsonicItemType.Song;
-        }
+        bool LogIn();
 
-        public Song(string theTitle, string theId)
-        {
-            Name = theTitle;
-            ID = theId;
-
-            base.ItemType = SubsonicItemType.Song;
-        }
+        /// <summary>
+        /// Uses the Auth Header for logged in user to make an HTTP request to the server 
+        /// with the given Subsonic API method and parameters
+        /// </summary>
+        /// <param name="method"></param>
+        /// <param name="parameters"></param>
+        /// <returns>Datastream of the server response</returns>
+        Stream MakeGenericRequest(string method, Dictionary<string, string> parameters = null);
     }
 }

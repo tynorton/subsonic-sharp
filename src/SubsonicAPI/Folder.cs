@@ -22,7 +22,7 @@
 
 using System.Collections.Generic;
 
-namespace SubsonicAPI
+namespace SubsonicSharp
 {
     public class Folder : SubsonicItem
     {

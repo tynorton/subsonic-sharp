@@ -22,19 +22,25 @@
 
 namespace SubsonicSharp
 {
-    public class Song : SubsonicItem
+    // If set to zero, no limit 
+    // is imposed. Legal values are: 0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256 and 320.
+    public enum Bitrate
     {
-        public Song()
-        {
-            base.ItemType = SubsonicItemType.Song;
-        }
-
-        public Song(string theTitle, string theId)
-        {
-            Name = theTitle;
-            ID = theId;
-
-            base.ItemType = SubsonicItemType.Song;
-        }
+        NoPreference = -1,
+        Maximum = 0,
+        Kbps32 = 32,
+        Kbps40 = 40,
+        Kbps48 = 48,
+        Kbps56 = 56,
+        Kbps64 = 64,
+        Kbps80 = 80,
+        Kbps96 = 96,
+        Kbps112 = 112,
+        Kbps128 = 128,
+        Kbps160 = 160,
+        Kbps192 = 192,
+        Kbps224 = 224,
+        Kbps256 = 256,
+        Kbps320 = 320
     }
 }

@@ -20,21 +20,31 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **************************************************************************/
 
-namespace SubsonicSharp
+using SubsonicSharp.Responses;
+
+namespace SubsonicSharp.Test.Responses
 {
-    public class Song : SubsonicItem
+    public abstract class TestGenericSoapResponse : GenericSoapResponse
     {
-        public Song()
+        protected abstract string GetInnerResponse();
+
+        /// <summary>
+        /// Returns the XML response
+        /// </summary>
+        /// <returns>XMl response text</returns>
+        public string GetResponse(bool allowInnerResponseNull = false)
         {
-            base.ItemType = SubsonicItemType.Song;
+            string innerResponseText = this.GetInnerResponse();
+            if (!allowInnerResponseNull && string.IsNullOrEmpty(innerResponseText))
+            {
+                throw new InvalidInnerResponseException("GetInnerResponse() must return valid XML");
+            }
+
+            return string.Format(SUBSONIC_RESPONSE_TEMPLATE, this.XmlNamespace, this.Status, this.Version,
+                                 innerResponseText);
         }
 
-        public Song(string theTitle, string theId)
-        {
-            Name = theTitle;
-            ID = theId;
-
-            base.ItemType = SubsonicItemType.Song;
-        }
+        private const string SUBSONIC_RESPONSE_TEMPLATE =
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<subsonic-response xmlns=\"{0}\" status=\"{1}\" version=\"{2}\">{3}</subsonic-response>";
     }
 }

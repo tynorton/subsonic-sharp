@@ -20,21 +20,10 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **************************************************************************/
 
-namespace SubsonicSharp
+namespace SubsonicSharp.Test
 {
-    public class Song : SubsonicItem
+    public class AuthenticatedSession
     {
-        public Song()
-        {
-            base.ItemType = SubsonicItemType.Song;
-        }
 
-        public Song(string theTitle, string theId)
-        {
-            Name = theTitle;
-            ID = theId;
-
-            base.ItemType = SubsonicItemType.Song;
-        }
     }
 }

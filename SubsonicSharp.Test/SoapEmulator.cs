@@ -20,21 +20,34 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **************************************************************************/
 
-namespace SubsonicSharp
+using SubsonicSharp.Test.Responses;
+
+namespace SubsonicSharp.Test
 {
-    public class Song : SubsonicItem
+    public class SoapEmulator
     {
-        public Song()
+        private AuthenticatedSession m_session;
+
+        public SoapEmulator(AuthenticatedSession session)
         {
-            base.ItemType = SubsonicItemType.Song;
+            this.m_session = session;
         }
 
-        public Song(string theTitle, string theId)
+        public string Ping()
         {
-            Name = theTitle;
-            ID = theId;
+            TestPingResponse pingResponse = new TestPingResponse();
+            return pingResponse.GetResponse(true);
+        }
 
-            base.ItemType = SubsonicItemType.Song;
+        public string GetMusicFolders()
+        {
+            TestGetMusicFoldersResponse getMusicFoldersResponse = new TestGetMusicFoldersResponse();
+            return getMusicFoldersResponse.GetResponse();
+        }
+
+        public string GetIndexes()
+        {
+            return string.Empty;
         }
     }
 }

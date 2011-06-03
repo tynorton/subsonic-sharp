@@ -8,8 +8,8 @@
     <ProjectGuid>{8EFE676D-0D2D-466A-B6D3-91F93FE71ADC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SubsonicAPI</RootNamespace>
-    <AssemblyName>SubsonicAPI</AssemblyName>
+    <RootNamespace>SubsonicSharp</RootNamespace>
+    <AssemblyName>SubsonicSharp</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -41,8 +41,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthorizationException.cs" />
+    <Compile Include="Bitrate.cs" />
     <Compile Include="Folder.cs" />
+    <Compile Include="ISubsonicConnection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Responses\GenericSoapResponse.cs" />
+    <Compile Include="Responses\InvalidInnerResponseException.cs" />
+    <Compile Include="Responses\PingResponse.cs" />
     <Compile Include="Song.cs" />
     <Compile Include="SubsonicAPI.cs" />
     <Compile Include="SubsonicConnection.cs" />

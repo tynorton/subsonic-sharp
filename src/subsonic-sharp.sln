@@ -1,9 +1,21 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubsonicAPI", "SubsonicAPI\SubsonicAPI.csproj", "{8EFE676D-0D2D-466A-B6D3-91F93FE71ADC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubsonicSharp", "SubsonicAPI\SubsonicSharp.csproj", "{8EFE676D-0D2D-466A-B6D3-91F93FE71ADC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubsonicSharp.Test", "..\SubsonicSharp.Test\SubsonicSharp.Test.csproj", "{DFE3371B-2278-42D3-8949-DF6D1E1205AA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C9F0EE26-71C3-485C-9EEE-BECA96DD9CCD}"
+	ProjectSection(SolutionItems) = preProject
+		Local.testsettings = Local.testsettings
+		subsonic-sharp.vsmdi = subsonic-sharp.vsmdi
+		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
+	EndProjectSection
 EndProject
 Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = subsonic-sharp.vsmdi
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -13,6 +25,10 @@ Global
 		{8EFE676D-0D2D-466A-B6D3-91F93FE71ADC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8EFE676D-0D2D-466A-B6D3-91F93FE71ADC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8EFE676D-0D2D-466A-B6D3-91F93FE71ADC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFE3371B-2278-42D3-8949-DF6D1E1205AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFE3371B-2278-42D3-8949-DF6D1E1205AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFE3371B-2278-42D3-8949-DF6D1E1205AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFE3371B-2278-42D3-8949-DF6D1E1205AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

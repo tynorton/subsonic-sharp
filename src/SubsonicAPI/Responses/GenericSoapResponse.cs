@@ -20,21 +20,24 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **************************************************************************/
 
-namespace SubsonicSharp
+namespace SubsonicSharp.Responses
 {
-    public class Song : SubsonicItem
+    public abstract class GenericSoapResponse
     {
-        public Song()
+        public string Version { get; set; }
+        public string Status { get; set; }
+        public string XmlNamespace { get; set; }
+
+        // Set defaults
+        protected GenericSoapResponse()
         {
-            base.ItemType = SubsonicItemType.Song;
+            this.XmlNamespace = DEFAULT_NAMESPACE;
+            this.Status = DEFAULT_STATUS;
+            this.Version = DEFAAULT_VERSION;
         }
 
-        public Song(string theTitle, string theId)
-        {
-            Name = theTitle;
-            ID = theId;
-
-            base.ItemType = SubsonicItemType.Song;
-        }
+        private const string DEFAAULT_VERSION = "1.5.0";
+        private const string DEFAULT_NAMESPACE = "http://subsonic.org/restapi";
+        private const string DEFAULT_STATUS = "ok";
     }
 }

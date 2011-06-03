@@ -20,21 +20,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **************************************************************************/
 
-namespace SubsonicSharp
+using System;
+
+namespace SubsonicSharp.Responses
 {
-    public class Song : SubsonicItem
+    public class InvalidInnerResponseException : Exception
     {
-        public Song()
-        {
-            base.ItemType = SubsonicItemType.Song;
-        }
-
-        public Song(string theTitle, string theId)
-        {
-            Name = theTitle;
-            ID = theId;
-
-            base.ItemType = SubsonicItemType.Song;
-        }
+        public InvalidInnerResponseException(string message) : base(message) {}
     }
 }
