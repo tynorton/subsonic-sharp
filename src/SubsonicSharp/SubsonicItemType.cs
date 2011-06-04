@@ -24,6 +24,6 @@ namespace SubsonicSharp
 {
     public enum SubsonicItemType
     {
-        Folder, Song
+        Folder, Song, Artist, Library, Playlist
     }
 }

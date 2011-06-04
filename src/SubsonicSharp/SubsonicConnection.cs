@@ -32,7 +32,7 @@ namespace SubsonicSharp
     public class SubsonicConnection : ISubsonicConnection
     {
         // Version of the REST API implemented
-        private const string API_VERSION = "1.4.0";
+        public const string API_VERSION = "1.4.0";
 
         // Subsonic REST API Url Format
         // http://server.address/rest/methodName/?v=apiVersion&c=appName
@@ -43,15 +43,20 @@ namespace SubsonicSharp
         private string m_appName;
         private string m_authHeader;
         private string m_server;
+        private string m_username;
+        private string m_password;
         private bool m_isAuthenticated;
 
         public SubsonicConnection(string server, string username, string password, string appName = null)
         {
             this.m_server = server;
+            this.m_username = username;
+            this.m_password = password;
             this.m_authHeader = Convert.ToBase64String(Encoding.Default.GetBytes(string.Format("{0}:{1}", username, password)));
             this.m_appName = string.IsNullOrEmpty(appName) ? defaultAppName : appName;
         }
 
+        
         public bool LogIn()
         {
             StreamReader sr = new StreamReader(this.MakeGenericRequest("ping"));
@@ -66,7 +71,13 @@ namespace SubsonicSharp
             return this.m_isAuthenticated;
         }
 
-        public Stream MakeGenericRequest(string method, Dictionary<string, string> parameters = null)
+        public string MakeGenericRequest(string method, Dictionary<string, string> parameters = null)
+        {
+            StreamReader reader = new StreamReader(this.MakeGenericStreamRequest(method, parameters));
+            return reader.ReadToEnd();
+        }
+
+        public Stream MakeGenericStreamRequest(string method, Dictionary<string, string> parameters = null)
         {
             // Check to see if Logged In yet
             if (string.IsNullOrEmpty(this.m_authHeader))

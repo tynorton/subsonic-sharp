@@ -35,19 +35,20 @@ namespace SubsonicSharp.Test
 
         public string Ping()
         {
-            TestPingResponse pingResponse = new TestPingResponse();
-            return pingResponse.GetResponse(true);
+            TestPingResponse response = new TestPingResponse();
+            return response.GetResponse(true);
         }
 
         public string GetMusicFolders()
         {
-            TestGetMusicFoldersResponse getMusicFoldersResponse = new TestGetMusicFoldersResponse();
-            return getMusicFoldersResponse.GetResponse();
+            TestGetMusicFoldersResponse response = new TestGetMusicFoldersResponse();
+            return response.GetResponse();
         }
 
         public string GetIndexes()
         {
-            return string.Empty;
+            TestGetIndexesResponse response = new TestGetIndexesResponse();
+            return response.GetResponse();
         }
     }
 }

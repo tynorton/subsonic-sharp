@@ -22,7 +22,7 @@
 
 namespace SubsonicSharp.Test.Responses
 {
-    class TestPingResponse : TestGenericSoapResponse
+    public class TestPingResponse : TestGenericSoapResponse
     {
         protected override string GetInnerResponse()
         {

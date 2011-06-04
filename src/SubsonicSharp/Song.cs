@@ -20,21 +20,61 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **************************************************************************/
 
+using System;
+using System.IO;
+
 namespace SubsonicSharp
 {
     public class Song : SubsonicItem
     {
+        public string Artist;
+        public string Album;
+        public string Title;
+
         public Song()
         {
-            base.ItemType = SubsonicItemType.Song;
+            this.Artist = string.Empty;
+            this.Title = string.Empty;
+            this.Album = string.Empty;
+            this.Name = string.Empty;
+            this.ID = string.Empty;
+            this.ItemType = SubsonicItemType.Song;
+            this.Parent = null;
+            this.LastAccessed = DateTime.Now.ToString();
         }
 
-        public Song(string theTitle, string theId)
+        public Song(string title, string artist, string album, string id)
         {
-            Name = theTitle;
-            ID = theId;
+            this.Artist = artist;
+            this.Title = title;
+            this.Album = album;
+            this.Name = title;
+            this.ID = id;
+            this.ItemType = SubsonicItemType.Song;
+            this.Parent = null;
+            this.LastAccessed = DateTime.Now.ToString();
+        }
 
-            base.ItemType = SubsonicItemType.Song;
+        public Song(string title, string artist, string album, string id, SubsonicItem parent)
+        {
+            this.Artist = artist;
+            this.Title = title;
+            this.Album = album;
+            this.Name = title;
+            this.ID = id;
+            this.ItemType = SubsonicItemType.Song;
+            this.Parent = parent;
+            this.LastAccessed = DateTime.Now.ToString();
+        }
+
+        public Stream GetStream(ISubsonicConnection connection)
+        {
+            return Subsonic.StreamSong(connection, this.ID);
+        }
+
+        public override string ToString()
+        {
+            return Artist + " - " + Title;
         }
     }
 }
