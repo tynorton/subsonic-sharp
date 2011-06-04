@@ -20,7 +20,10 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **************************************************************************/
 
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SubsonicSharp.Test.Responses;
 
 namespace SubsonicSharp.Test
 {
@@ -81,9 +84,19 @@ namespace SubsonicSharp.Test
         public void TestGetMusicFolders()
         {
             EmulatorConnection testConnection = new EmulatorConnection();
-            Folder folder = Subsonic.GetMusicDirectory(testConnection, "1");
+            //List<SubsonicItem> items = Subsonic.GetMusicDirectory(testConnection, "1");
 
-            //string musicFoldersResponse = Subsonic.GetMusicFolders();
+            //return Subsonic.GetMusicFolders();
+        }
+
+        [TestMethod]
+        public void TestGetIndexes()
+        {
+            EmulatorConnection testConnection = new EmulatorConnection();
+            List<SubsonicItem> items = Subsonic.GetIndexes(testConnection);
+            var expectedItems = TestGetIndexesResponse.GetExmapleIndexes();
+
+            Assert.IsTrue(items.Count == expectedItems.Values.Sum(value => value.Count), "Item count doesn't match");
         }
 
         [TestMethod]
@@ -91,8 +104,6 @@ namespace SubsonicSharp.Test
         {
             EmulatorConnection testConnection = new EmulatorConnection();
             Assert.IsTrue(testConnection.LogIn(), "LogIn method didn't return expected result");
-
-            //string musicFoldersResponse = Subsonic.GetMusicFolders();
         }
     }
 }

@@ -26,7 +26,7 @@ using System.Xml;
 
 namespace SubsonicSharp.Test.Responses
 {
-    class TestGetMusicFoldersResponse : TestGenericSoapResponse
+    public class TestGetMusicFoldersResponse : TestGenericSoapResponse
     {
         protected override string GetInnerResponse()
         {

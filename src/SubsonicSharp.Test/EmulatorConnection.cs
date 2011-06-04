@@ -20,8 +20,10 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **************************************************************************/
 
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Text;
 
 namespace SubsonicSharp.Test
@@ -45,14 +47,16 @@ namespace SubsonicSharp.Test
             return !string.IsNullOrEmpty(logInResponse);
         }
 
-        public Stream MakeGenericRequest(string method, Dictionary<string, string> parameters = null)
+        public string MakeGenericRequest(string method, Dictionary<string, string> parameters = null)
         {
-            MemoryStream memoryStream = new MemoryStream();
+            string response = string.Empty;
             switch (method)
             {
                 case "ping":
-                    byte[] pingResponse = Encoding.UTF8.GetBytes(this.m_enumulator.Ping());
-                    memoryStream.Write(pingResponse, 0, pingResponse.Length);
+                    response = this.m_enumulator.Ping();
+                    break;
+                case "getIndexes":
+                    response = this.m_enumulator.GetIndexes();
                     break;
                 case "getmusicfolder":
                     break;
@@ -62,7 +66,12 @@ namespace SubsonicSharp.Test
                     break;
             }
 
-            return memoryStream;
+            return response;
+        }
+
+        public Stream MakeGenericStreamRequest(string method, Dictionary<string, string> parameters)
+        {
+            throw new NotImplementedException();
         }
     }
 }

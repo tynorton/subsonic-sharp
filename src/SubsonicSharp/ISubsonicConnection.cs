@@ -27,6 +27,11 @@ namespace SubsonicSharp
 {
     public interface ISubsonicConnection
     {
+        /// <summary>
+        /// Takes parameters for server, username and password to generate an auth header
+        /// and Pings the server
+        /// </summary>
+        /// <returns>True if successful</returns>
         bool LogIn();
 
         /// <summary>
@@ -35,7 +40,16 @@ namespace SubsonicSharp
         /// </summary>
         /// <param name="method"></param>
         /// <param name="parameters"></param>
-        /// <returns>Datastream of the server response</returns>
-        Stream MakeGenericRequest(string method, Dictionary<string, string> parameters = null);
+        /// <returns>string of the server response</returns>
+        string MakeGenericRequest(string method, Dictionary<string, string> parameters = null);
+
+        /// <summary>
+        /// Uses the Auth Header for logged in user to make an HTTP request to the server 
+        /// with the given Subsonic API method and parameters
+        /// </summary>
+        /// <param name="method"></param>
+        /// <param name="parameters"></param>
+        /// <returns>string of the server response</returns>
+        Stream MakeGenericStreamRequest(string method, Dictionary<string, string> parameters = null);
     }
 }

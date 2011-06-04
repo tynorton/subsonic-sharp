@@ -20,18 +20,100 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 **************************************************************************/
 
+using System;
+using System.Collections.Generic;
+
 namespace SubsonicSharp
 {
     public class SubsonicItem
     {
         public string Name;
         public string ID;
-
+        public string LastModified;
+        public string LastAccessed;
         public SubsonicItemType ItemType;
+        public SubsonicItem Parent;
+
+        private List<SubsonicItem> m_children;
+        public List<SubsonicItem> Children
+        {
+            get
+            {
+                if (this.m_children == null)
+                {
+                    if (this.ItemType != SubsonicItemType.Song)
+                    {
+                        this.m_children = Subsonic.GetItemChildren(new SubsonicConnection(string.Empty, string.Empty, string.Empty), this, string.Empty);
+                    }
+                }
+                return this.m_children;
+            }
+            set
+            {
+                this.m_children = value;
+            }
+        }
+
+        public SubsonicItem()
+        {
+            this.Name = string.Empty;
+            this.ID = string.Empty;
+            this.LastAccessed = DateTime.Now.ToString();
+        }
+
+        public SubsonicItem(string name, string id) : this()
+        {
+            this.Name = name;
+            this.ID = id;
+        }
+
+        public SubsonicItem(string name, string id, SubsonicItemType itemType, SubsonicItem parent) : this(name, id)
+        {
+            this.ItemType = itemType;
+            this.Parent = parent;
+        }
 
         public override string ToString()
         {
-            return Name;
+            return this.Name;
+        }
+
+        public SubsonicItem FindItemById(string id)
+        {
+            SubsonicItem foundItem = null;
+
+            // If the current item is the item we are looking for, return it
+            if (this.ID.Equals(id))
+            {
+                foundItem = this;
+            }
+
+            // Otherwise, we check the children if they exist
+            else if (this.m_children != null)
+            {
+                foreach (SubsonicItem child in this.m_children)
+                {
+                    // If this child is the item we are looking for, return it
+                    if (child.ID == id)
+                    {
+                        foundItem = child;
+                        break;
+                    }
+
+                    foundItem = child.FindItemById(id);
+                    if (foundItem != null)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            return foundItem;
+        }
+
+        public SubsonicItem GetChildByName(string childName)
+        {
+            return this.m_children.Find(itm => itm.Name == childName);
         }
     }
 }

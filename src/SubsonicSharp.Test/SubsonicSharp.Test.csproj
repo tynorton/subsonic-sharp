@@ -50,6 +50,7 @@
     <Compile Include="EmulatorConnection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Responses\TestGenericSoapResponse.cs" />
+    <Compile Include="Responses\TestGetIndexesResponse.cs" />
     <Compile Include="Responses\TestGetMusicFoldersResponse.cs" />
     <Compile Include="Responses\TestPingResponse.cs" />
     <Compile Include="SoapEmulator.cs" />
