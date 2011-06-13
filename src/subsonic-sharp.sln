@@ -12,23 +12,83 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubsonicSharp.Test", "Subso
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubsonicSharp", "SubsonicSharp\SubsonicSharp.csproj", "{8EFE676D-0D2D-466A-B6D3-91F93FE71ADC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubsonicSharp.Cmd", "SubsonicSharp.Cmd\SubsonicSharp.Cmd.csproj", "{529608B1-FED0-40D3-8D3A-7F30BDC103DD}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "SubsonicSharp.Web", "SubsonicSharp.Web\", "{24D13300-7AB3-425E-81DA-DE2225B070AA}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		ProjectReferences = "{8EFE676D-0D2D-466A-B6D3-91F93FE71ADC}|SubsonicSharp.dll;"
+		Debug.AspNetCompiler.VirtualPath = "/SubsonicSharp.Web"
+		Debug.AspNetCompiler.PhysicalPath = "SubsonicSharp.Web\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\SubsonicSharp.Web\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/SubsonicSharp.Web"
+		Release.AspNetCompiler.PhysicalPath = "SubsonicSharp.Web\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\SubsonicSharp.Web\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "9473"
+		DefaultWebSiteLanguage = "Visual C#"
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = subsonic-sharp.vsmdi
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{DFE3371B-2278-42D3-8949-DF6D1E1205AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DFE3371B-2278-42D3-8949-DF6D1E1205AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFE3371B-2278-42D3-8949-DF6D1E1205AA}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{DFE3371B-2278-42D3-8949-DF6D1E1205AA}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{DFE3371B-2278-42D3-8949-DF6D1E1205AA}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{DFE3371B-2278-42D3-8949-DF6D1E1205AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DFE3371B-2278-42D3-8949-DF6D1E1205AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFE3371B-2278-42D3-8949-DF6D1E1205AA}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{DFE3371B-2278-42D3-8949-DF6D1E1205AA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{DFE3371B-2278-42D3-8949-DF6D1E1205AA}.Release|x86.ActiveCfg = Release|Any CPU
 		{8EFE676D-0D2D-466A-B6D3-91F93FE71ADC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8EFE676D-0D2D-466A-B6D3-91F93FE71ADC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EFE676D-0D2D-466A-B6D3-91F93FE71ADC}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{8EFE676D-0D2D-466A-B6D3-91F93FE71ADC}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{8EFE676D-0D2D-466A-B6D3-91F93FE71ADC}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{8EFE676D-0D2D-466A-B6D3-91F93FE71ADC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8EFE676D-0D2D-466A-B6D3-91F93FE71ADC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8EFE676D-0D2D-466A-B6D3-91F93FE71ADC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{8EFE676D-0D2D-466A-B6D3-91F93FE71ADC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{8EFE676D-0D2D-466A-B6D3-91F93FE71ADC}.Release|x86.ActiveCfg = Release|Any CPU
+		{529608B1-FED0-40D3-8D3A-7F30BDC103DD}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{529608B1-FED0-40D3-8D3A-7F30BDC103DD}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{529608B1-FED0-40D3-8D3A-7F30BDC103DD}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{529608B1-FED0-40D3-8D3A-7F30BDC103DD}.Debug|x86.ActiveCfg = Debug|x86
+		{529608B1-FED0-40D3-8D3A-7F30BDC103DD}.Debug|x86.Build.0 = Debug|x86
+		{529608B1-FED0-40D3-8D3A-7F30BDC103DD}.Release|Any CPU.ActiveCfg = Release|x86
+		{529608B1-FED0-40D3-8D3A-7F30BDC103DD}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{529608B1-FED0-40D3-8D3A-7F30BDC103DD}.Release|Mixed Platforms.Build.0 = Release|x86
+		{529608B1-FED0-40D3-8D3A-7F30BDC103DD}.Release|x86.ActiveCfg = Release|x86
+		{529608B1-FED0-40D3-8D3A-7F30BDC103DD}.Release|x86.Build.0 = Release|x86
+		{24D13300-7AB3-425E-81DA-DE2225B070AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24D13300-7AB3-425E-81DA-DE2225B070AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24D13300-7AB3-425E-81DA-DE2225B070AA}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{24D13300-7AB3-425E-81DA-DE2225B070AA}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{24D13300-7AB3-425E-81DA-DE2225B070AA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{24D13300-7AB3-425E-81DA-DE2225B070AA}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{24D13300-7AB3-425E-81DA-DE2225B070AA}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{24D13300-7AB3-425E-81DA-DE2225B070AA}.Release|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{24D13300-7AB3-425E-81DA-DE2225B070AA}.Release|Mixed Platforms.Build.0 = Debug|Any CPU
+		{24D13300-7AB3-425E-81DA-DE2225B070AA}.Release|x86.ActiveCfg = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

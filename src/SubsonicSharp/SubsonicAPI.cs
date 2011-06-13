@@ -23,7 +23,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Xml;
 
 namespace SubsonicSharp
@@ -34,7 +33,8 @@ namespace SubsonicSharp
     /// </summary>
     public static class Subsonic
     {
-        private static SubsonicItem _MyLibrary = new SubsonicItem("LibraryRoot", "-1", SubsonicItemType.Library, null);
+        private const string ROOT_ITEM_NAME = "LibraryRoot";
+        private static SubsonicItem _MyLibrary = new SubsonicItem(ROOT_ITEM_NAME, "-1", SubsonicItemType.Library, null);
         
         /// <summary>
         /// Public Property that can be used for auto-retrieving children
@@ -45,15 +45,12 @@ namespace SubsonicSharp
             {
                 return _MyLibrary;
             }
-            set
-            {
-                _MyLibrary = value;
-            }
         }
-        
+
         /// <summary>
         /// Returns a list of SubsonicItems that fall inside the parent object 
         /// </summary>
+        /// <param name="connection"></param>
         /// <param name="parent">
         /// A <see cref="SubsonicItem"/>
         /// </param>
@@ -68,7 +65,7 @@ namespace SubsonicSharp
             Dictionary<string, string> parameters = new Dictionary<string, string>();
             
             // Generate the proper request for the parent type
-            string requestType, musicFolderId;
+            string requestType;
             if (parent.ItemType == SubsonicItemType.Library)
             {
                 requestType = "getIndexes";
@@ -90,26 +87,27 @@ namespace SubsonicSharp
             }
 
             // Make the request
-            string result = connection.MakeGenericRequest(requestType, parameters);
+            string result = connection.GetResponse(requestType, parameters);
 
             // Parse the resulting XML string into an XmlDocument
-            XmlDocument myXML = new XmlDocument();
-            myXML.LoadXml(result);
+            XmlDocument myXml = new XmlDocument();
+            myXml.LoadXml(result);
             
             // Parse the artist out of the result
             List<SubsonicItem> children = new List<SubsonicItem>();
             if (parent.ItemType == SubsonicItemType.Library)
             {
-                if (myXML.ChildNodes[1].Name == "subsonic-response")
+                if (myXml.ChildNodes[1].Name == "subsonic-response")
                 {
-                    if (myXML.ChildNodes[1].FirstChild.Name == "indexes")
+                    if (myXml.ChildNodes[1].FirstChild.Name == "indexes")
                     {
-                        for (int i = 0; i < myXML.ChildNodes[1].FirstChild.ChildNodes.Count; i++)
+                        for (int i = 0; i < myXml.ChildNodes[1].FirstChild.ChildNodes.Count; i++)
                         {
-                            for (int j = 0; j < myXML.ChildNodes[1].FirstChild.ChildNodes[i].ChildNodes.Count; j++)
+                            // Ignore index name (and entire concept), and move on to parse children
+                            for (int j = 0; j < myXml.ChildNodes[1].FirstChild.ChildNodes[i].ChildNodes.Count; j++)
                             {
-                                string artist = myXML.ChildNodes[1].FirstChild.ChildNodes[i].ChildNodes[j].Attributes["name"].Value;
-                                string id = myXML.ChildNodes[1].FirstChild.ChildNodes[i].ChildNodes[j].Attributes["id"].Value;
+                                string artist = myXml.ChildNodes[1].FirstChild.ChildNodes[i].ChildNodes[j].Attributes["name"].Value;
+                                string id = myXml.ChildNodes[1].FirstChild.ChildNodes[i].ChildNodes[j].Attributes["id"].Value;
     
                                 children.Add(new SubsonicItem(artist, id, SubsonicItemType.Folder, parent));
                             }
@@ -120,15 +118,15 @@ namespace SubsonicSharp
             // Parse the directory
             else if (parent.ItemType == SubsonicItemType.Folder)
             {
-                if (myXML.ChildNodes[1].Name == "subsonic-response")
+                if (myXml.ChildNodes[1].Name == "subsonic-response")
                 {
-                    if (myXML.ChildNodes[1].FirstChild.Name == "directory")
+                    if (myXml.ChildNodes[1].FirstChild.Name == "directory")
                     {
-                        for (int i = 0; i < myXML.ChildNodes[1].FirstChild.ChildNodes.Count; i++)
+                        for (int i = 0; i < myXml.ChildNodes[1].FirstChild.ChildNodes.Count; i++)
                         {
-                            bool isDir = bool.Parse(myXML.ChildNodes[1].FirstChild.ChildNodes[i].Attributes["isDir"].Value);
-                            string title = myXML.ChildNodes[1].FirstChild.ChildNodes[i].Attributes["title"].Value;
-                            string id = myXML.ChildNodes[1].FirstChild.ChildNodes[i].Attributes["id"].Value;
+                            bool isDir = bool.Parse(myXml.ChildNodes[1].FirstChild.ChildNodes[i].Attributes["isDir"].Value);
+                            string title = myXml.ChildNodes[1].FirstChild.ChildNodes[i].Attributes["title"].Value;
+                            string id = myXml.ChildNodes[1].FirstChild.ChildNodes[i].Attributes["id"].Value;
     
                             SubsonicItem theItem = new SubsonicItem(title, id, (isDir ? SubsonicItemType.Folder : SubsonicItemType.Song), parent);
                             children.Add(theItem);
@@ -143,7 +141,8 @@ namespace SubsonicSharp
         /// <summary>
         /// Returns an indexed structure of all artists.
         /// </summary>
-        /// <param name="parent">Required: No; If specified, only return artists in the music folder with the given ID.</param>
+        /// <param name="connection"></param>
+        /// <param name="musicFolderId">Required: No; If specified, only return artists in the music folder with the given ID.</param>
         /// <param name="ifModifiedSince">Required: No; If specified, only return a result if the artist collection has changed since the given time.</param>
         /// <returns>Dictionary, Key = Artist and Value = id</returns>
         public static List<SubsonicItem> GetIndexes(ISubsonicConnection connection, string musicFolderId, string ifModifiedSince)
@@ -161,26 +160,24 @@ namespace SubsonicSharp
             }
 
             // Make the request
-            string result = connection.MakeGenericRequest("getIndexes", parameters);
+            string result = connection.GetResponse("getIndexes", parameters);
 
             // Parse the resulting XML string into an XmlDocument
-            XmlDocument myXML = new XmlDocument();
-            myXML.LoadXml(result);
+            XmlDocument myXml = new XmlDocument();
+            myXml.LoadXml(result);
 
             // Parse the XML document into a List
             List<SubsonicItem> artists = new List<SubsonicItem>();
-            if (myXML.ChildNodes[1].Name == "subsonic-response")
+            if (myXml.ChildNodes[1].Name == "subsonic-response")
             {
-                if (myXML.ChildNodes[1].FirstChild.Name == "indexes")
+                if (myXml.ChildNodes[1].FirstChild.Name == "indexes")
                 {
-                    int i = 0;
-                    for (i = 0; i < myXML.ChildNodes[1].FirstChild.ChildNodes.Count; i++)
+                    for (int i = 0; i < myXml.ChildNodes[1].FirstChild.ChildNodes.Count; i++)
                     {
-                        int j = 0;
-                        for (j = 0; j < myXML.ChildNodes[1].FirstChild.ChildNodes[i].ChildNodes.Count; j++)
+                        for (int j = 0; j < myXml.ChildNodes[1].FirstChild.ChildNodes[i].ChildNodes.Count; j++)
                         {
-                            string artist = myXML.ChildNodes[1].FirstChild.ChildNodes[i].ChildNodes[j].Attributes["name"].Value;
-                            string id = myXML.ChildNodes[1].FirstChild.ChildNodes[i].ChildNodes[j].Attributes["id"].Value;
+                            string artist = myXml.ChildNodes[1].FirstChild.ChildNodes[i].ChildNodes[j].Attributes["name"].Value;
+                            string id = myXml.ChildNodes[1].FirstChild.ChildNodes[i].ChildNodes[j].Attributes["id"].Value;
 
                             artists.Add(new SubsonicItem(artist, id));
                         }
@@ -220,7 +217,7 @@ namespace SubsonicSharp
             }
 
             // Makes the request
-            return connection.MakeGenericStreamRequest("stream", theParameters);
+            return connection.GetResponseStream("stream", theParameters);
         }
 
         public static Stream StreamSong(ISubsonicConnection connection, string id)
@@ -231,38 +228,40 @@ namespace SubsonicSharp
         /// <summary>
         /// Returns a listing of all files in a music directory. Typically used to get list of albums for an artist, or list of songs for an album.
         /// </summary>
+        /// <param name="connection"></param>
         /// <param name="id">A string which uniquely identifies the music folder. Obtained by calls to getIndexes or getMusicDirectory.</param>
         /// <returns>MusicFolder object containing info for the specified directory</returns>
         public static List<SubsonicItem> GetMusicDirectory(ISubsonicConnection connection, string id)
         {
             Dictionary<string, string> theParameters = new Dictionary<string, string> {{"id", id}};
 
-            string result = connection.MakeGenericRequest("getMusicDirectory", theParameters);
+            string result = connection.GetResponse("getMusicDirectory", theParameters);
             if (string.IsNullOrEmpty(result))
             {
                 throw new NullReferenceException("resulting xml is null");
             }
 
-            XmlDocument myXML = new XmlDocument();
+            XmlDocument myXml = new XmlDocument();
 
-            myXML.LoadXml(result);
+            myXml.LoadXml(result);
 
             List<SubsonicItem> theContents = new List<SubsonicItem>();
 
-            if (myXML.ChildNodes[1].Name == "subsonic-response")
+            if (myXml.ChildNodes[1].Name == "subsonic-response")
             {
-                if (myXML.ChildNodes[1].FirstChild.Name == "directory")
+                if (myXml.ChildNodes[1].FirstChild.Name == "directory")
                 {
-                    SubsonicItem theParent = new SubsonicItem();
-                    theParent.Name = myXML.ChildNodes[1].FirstChild.Attributes["name"].Value;
-                    theParent.ID = myXML.ChildNodes[1].FirstChild.Attributes["id"].Value;
-
-                    int i = 0;
-                    for (i = 0; i < myXML.ChildNodes[1].FirstChild.ChildNodes.Count; i++)
+                    SubsonicItem theParent = new SubsonicItem
                     {
-                        bool isDir = bool.Parse(myXML.ChildNodes[1].FirstChild.ChildNodes[i].Attributes["isDir"].Value);
-                        string title = myXML.ChildNodes[1].FirstChild.ChildNodes[i].Attributes["title"].Value;
-                        string theId = myXML.ChildNodes[1].FirstChild.ChildNodes[i].Attributes["id"].Value;
+                        Name = myXml.ChildNodes[1].FirstChild.Attributes["name"].Value,
+                        ID = myXml.ChildNodes[1].FirstChild.Attributes["id"].Value
+                    };
+
+                    for (int i = 0; i < myXml.ChildNodes[1].FirstChild.ChildNodes.Count; i++)
+                    {
+                        bool isDir = bool.Parse(myXml.ChildNodes[1].FirstChild.ChildNodes[i].Attributes["isDir"].Value);
+                        string title = myXml.ChildNodes[1].FirstChild.ChildNodes[i].Attributes["title"].Value;
+                        string theId = myXml.ChildNodes[1].FirstChild.ChildNodes[i].Attributes["id"].Value;
 
                         SubsonicItem theItem = new SubsonicItem(title, theId, (isDir ? SubsonicItemType.Folder : SubsonicItemType.Song), theParent);
                         theContents.Add(theItem);
@@ -281,7 +280,7 @@ namespace SubsonicSharp
             List<SubsonicItem> nowPlaying = new List<SubsonicItem>();
 
             Dictionary<string, string> theParameters = new Dictionary<string, string>();
-            string result = connection.MakeGenericRequest("getNowPlaying", theParameters);
+            string result = connection.GetResponse("getNowPlaying", theParameters);
 
             /// TODO: Parse result to list
 
@@ -293,16 +292,17 @@ namespace SubsonicSharp
         /// If version is >= 1.4.0 search2
         /// Else search
         /// </summary>
+        /// <param name="connection"></param>
         /// <param name="query">The Term you want to search for</param>
         /// <returns>A List of SubsonicItem objects</returns>
         public static List<SubsonicItem> Search(ISubsonicConnection connection, string query)
         {
             Dictionary<string, string> parameters = new Dictionary<string, string>();
-            Version apiV = new Version(SubsonicConnection.API_VERSION);
-            Version Search2Min = new Version("1.4.0");
+            Version apiV = new Version(Constants.Subsonic.API_VERSION);
+            Version search2Min = new Version("1.4.0");
             string request = "";
             // Use search for the server version
-            if (apiV >= Search2Min)
+            if (apiV >= search2Min)
             {
                 request = "search2";
                 parameters.Add("query", query);
@@ -314,42 +314,34 @@ namespace SubsonicSharp
             }
 
             // Make the request
-            string result = connection.MakeGenericRequest(request, parameters);
+            string result = connection.GetResponse(request, parameters);
 
             // Parse the resulting XML string into an XmlDocument
-            XmlDocument myXML = new XmlDocument();
-            myXML.LoadXml(result);
+            XmlDocument myXml = new XmlDocument();
+            myXml.LoadXml(result);
 
             List<SubsonicItem> searchResults = new List<SubsonicItem>();
 
             // Parse the artist
-            if (myXML.ChildNodes[1].Name == "subsonic-response")
+            if (myXml.ChildNodes[1].Name == "subsonic-response")
             {
-                if (myXML.ChildNodes[1].FirstChild.Name == "searchResult")
+                if (myXml.ChildNodes[1].FirstChild.Name == "searchResult")
                 {
-                    for (int i = 0; i < myXML.ChildNodes[1].FirstChild.ChildNodes.Count; i++)
+                    for (int i = 0; i < myXml.ChildNodes[1].FirstChild.ChildNodes.Count; i++)
                     {
-                        bool isDir = bool.Parse(myXML.ChildNodes[1].FirstChild.ChildNodes[i].Attributes["isDir"].Value);
-                        string title = myXML.ChildNodes[1].FirstChild.ChildNodes[i].Attributes["title"].Value;
-                        string theId = myXML.ChildNodes[1].FirstChild.ChildNodes[i].Attributes["id"].Value;
+                        bool isDir = bool.Parse(myXml.ChildNodes[1].FirstChild.ChildNodes[i].Attributes["isDir"].Value);
+                        string title = myXml.ChildNodes[1].FirstChild.ChildNodes[i].Attributes["title"].Value;
+                        string theId = myXml.ChildNodes[1].FirstChild.ChildNodes[i].Attributes["id"].Value;
                         string artist = "";
                         string album = "";
 
                         if (!isDir)
                         {
-                            artist = myXML.ChildNodes[1].FirstChild.ChildNodes[i].Attributes["artist"].Value;
-                            album = myXML.ChildNodes[1].FirstChild.ChildNodes[i].Attributes["album"].Value;
+                            artist = myXml.ChildNodes[1].FirstChild.ChildNodes[i].Attributes["artist"].Value;
+                            album = myXml.ChildNodes[1].FirstChild.ChildNodes[i].Attributes["album"].Value;
                         }
 
-                        SubsonicItem theItem;
-                        if (isDir)
-                        {
-                            theItem = new SubsonicItem(title, theId, SubsonicItemType.Folder, null);
-                        }
-                        else
-                        {
-                            theItem = new Song(title, artist, album, theId);
-                        }
+                        SubsonicItem theItem = isDir ? new SubsonicItem(title, theId, SubsonicItemType.Folder, null) : new Song(title, artist, album, theId);
 
                         searchResults.Add(theItem);
                     }
@@ -367,7 +359,7 @@ namespace SubsonicSharp
             List<SubsonicItem> playlists = new List<SubsonicItem>();
 
             Dictionary<string, string> theParameters = new Dictionary<string, string>();
-            string result = connection.MakeGenericRequest("getPlaylists", theParameters);
+            string result = connection.GetResponse("getPlaylists", theParameters);
 
             /// TODO: Parse result into list
 
@@ -377,6 +369,7 @@ namespace SubsonicSharp
         /// <summary>
         /// Returns a list of all SubsonicItems in playlist of given ID 
         /// </summary>
+        /// <param name="connection"></param>
         /// <param name="playlistId">
         /// ID of playlist to be fetched [retreive from GetPlaylists()]
         /// </param>
@@ -386,11 +379,9 @@ namespace SubsonicSharp
         public static List<SubsonicItem> GetPlaylist(ISubsonicConnection connection, string playlistId)
         {
             List<SubsonicItem> playlist = new List<SubsonicItem>();
+            Dictionary<string, string> theParameters = new Dictionary<string, string> {{"id", playlistId}};
 
-            Dictionary<string, string> theParameters = new Dictionary<string, string>();
-            theParameters.Add("id", playlistId);
-
-            string result = connection.MakeGenericRequest("getPlaylist", theParameters);
+            string result = connection.GetResponse("getPlaylist", theParameters);
 
             /// TODO: Parse result into list
 

@@ -43,7 +43,7 @@ namespace SubsonicSharp
                 {
                     if (this.ItemType != SubsonicItemType.Song)
                     {
-                        this.m_children = Subsonic.GetItemChildren(new SubsonicConnection(string.Empty, string.Empty, string.Empty), this, string.Empty);
+                        this.m_children = new List<SubsonicItem>();
                     }
                 }
                 return this.m_children;
@@ -113,7 +113,7 @@ namespace SubsonicSharp
 
         public SubsonicItem GetChildByName(string childName)
         {
-            return this.m_children.Find(itm => itm.Name == childName);
+            return this.m_children.Find(item => item.Name == childName);
         }
     }
 }

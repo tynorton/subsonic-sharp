@@ -84,6 +84,7 @@ namespace SubsonicSharp.Test
         public void TestGetMusicFolders()
         {
             EmulatorConnection testConnection = new EmulatorConnection();
+            // TODO: Implement TestGetMusicFoldersResponse
             //List<SubsonicItem> items = Subsonic.GetMusicDirectory(testConnection, "1");
 
             //return Subsonic.GetMusicFolders();
@@ -97,6 +98,7 @@ namespace SubsonicSharp.Test
             var expectedItems = TestGetIndexesResponse.GetExmapleIndexes();
 
             Assert.IsTrue(items.Count == expectedItems.Values.Sum(value => value.Count), "Item count doesn't match");
+            // TODO: Check item values
         }
 
         [TestMethod]

@@ -31,40 +31,11 @@ namespace SubsonicSharp
         public string Album;
         public string Title;
 
-        public Song()
+        public Song(string title = "", string artist = "", string album = "", string id = "", SubsonicItem parent = null) : base(title, id, SubsonicItemType.Song, parent)
         {
-            this.Artist = string.Empty;
-            this.Title = string.Empty;
-            this.Album = string.Empty;
-            this.Name = string.Empty;
-            this.ID = string.Empty;
-            this.ItemType = SubsonicItemType.Song;
-            this.Parent = null;
-            this.LastAccessed = DateTime.Now.ToString();
-        }
-
-        public Song(string title, string artist, string album, string id)
-        {
-            this.Artist = artist;
             this.Title = title;
-            this.Album = album;
-            this.Name = title;
-            this.ID = id;
-            this.ItemType = SubsonicItemType.Song;
-            this.Parent = null;
-            this.LastAccessed = DateTime.Now.ToString();
-        }
-
-        public Song(string title, string artist, string album, string id, SubsonicItem parent)
-        {
             this.Artist = artist;
-            this.Title = title;
             this.Album = album;
-            this.Name = title;
-            this.ID = id;
-            this.ItemType = SubsonicItemType.Song;
-            this.Parent = parent;
-            this.LastAccessed = DateTime.Now.ToString();
         }
 
         public Stream GetStream(ISubsonicConnection connection)
@@ -74,7 +45,7 @@ namespace SubsonicSharp
 
         public override string ToString()
         {
-            return Artist + " - " + Title;
+            return string.Format("{0} ({1}) - {2}", this.Artist, this.Album, this.Title);
         }
     }
 }

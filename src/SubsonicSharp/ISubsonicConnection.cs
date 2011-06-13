@@ -41,7 +41,7 @@ namespace SubsonicSharp
         /// <param name="method"></param>
         /// <param name="parameters"></param>
         /// <returns>string of the server response</returns>
-        string MakeGenericRequest(string method, Dictionary<string, string> parameters = null);
+        string GetResponse(string method, Dictionary<string, string> parameters = null);
 
         /// <summary>
         /// Uses the Auth Header for logged in user to make an HTTP request to the server 
@@ -50,6 +50,6 @@ namespace SubsonicSharp
         /// <param name="method"></param>
         /// <param name="parameters"></param>
         /// <returns>string of the server response</returns>
-        Stream MakeGenericStreamRequest(string method, Dictionary<string, string> parameters = null);
+        Stream GetResponseStream(string method, Dictionary<string, string> parameters = null);
     }
 }

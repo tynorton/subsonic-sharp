@@ -23,8 +23,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
-using System.Text;
 
 namespace SubsonicSharp.Test
 {
@@ -47,7 +45,7 @@ namespace SubsonicSharp.Test
             return !string.IsNullOrEmpty(logInResponse);
         }
 
-        public string MakeGenericRequest(string method, Dictionary<string, string> parameters = null)
+        public string GetResponse(string method, Dictionary<string, string> parameters = null)
         {
             string response = string.Empty;
             switch (method)
@@ -69,7 +67,7 @@ namespace SubsonicSharp.Test
             return response;
         }
 
-        public Stream MakeGenericStreamRequest(string method, Dictionary<string, string> parameters)
+        public Stream GetResponseStream(string method, Dictionary<string, string> parameters = null)
         {
             throw new NotImplementedException();
         }
